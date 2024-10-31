@@ -7,7 +7,6 @@ import {
     getFilteredRowModel,
     getSortedRowModel,
  } from '@tanstack/react-table';
-import axios from 'axios';
 import {
     Table,
     TableBody,
@@ -29,12 +28,20 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select";
+  import {
+    DropdownMenu,
+    DropdownMenuCheckboxItem,
+    DropdownMenuContent,
+    DropdownMenuTrigger,
+  } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button"
 import { Input } from '@/components/ui/input';
+import DataTableRowActions from '../table/data-table-row-actions';
+import DataTableFacetedFilter from '../table/data-table-faceted-filter';
 export default function DataTable({data, columns}) {
     const [sorting, setSorting] = useState([]);
     const [filtering, setFiltering] = useState('');
-
+    const [columnVisibility, setColumnVisibility] = useState({})
 
     const table = useReactTable({
         data,
@@ -43,9 +50,11 @@ export default function DataTable({data, columns}) {
         getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
+        onColumnVisibilityChange: setColumnVisibility,
         state: {
             sorting : sorting,
-            globalFilter: filtering
+            globalFilter: filtering,
+            columnVisibility,
         },
         onSortingChange: setSorting,
         onGlobalFilterChange: setFiltering,
@@ -61,6 +70,45 @@ export default function DataTable({data, columns}) {
             }
             className="max-w-sm"
             />
+            <DataTableFacetedFilter 
+                column={table.getColumn("status")}  // replace "status" with the actual column ID
+                title="Filter by" 
+                options={[
+                    { label: 'Active', value: 'active' },
+                    { label: 'Inactive', value: 'inactive' },
+                    // Add more options as needed
+                ]}
+            />
+            
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="ml-auto">
+              Columns
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {table
+              .getAllColumns()
+              .filter(
+                (column) => column.getCanHide()
+              )
+              .map((column) => {
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                )
+              })}
+          </DropdownMenuContent>
+        </DropdownMenu>
             
         </div>
         <Table className='min-w-full bg-white border border-gray-200 rounded-lg shadow'>
@@ -97,6 +145,10 @@ export default function DataTable({data, columns}) {
                                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
                             </TableCell>
                         ))}
+                        <TableCell>
+                        <DataTableRowActions row={row} />
+
+                        </TableCell>
                     </TableRow>
                 ))}
             </TableBody>

@@ -1,7 +1,7 @@
 import { SiMicrosoftexcel } from "react-icons/si";
 import * as XLSX from "xlsx/xlsx.mjs";
 
-const DownloadBtn = ({ data = [], fileName }) => {
+const ExcelDownloadBtn = ({ data = [], fileName }) => {
   return (
     <button
       className="download-btn"
@@ -13,10 +13,12 @@ const DownloadBtn = ({ data = [], fileName }) => {
         XLSX.writeFile(workbook, fileName ? `${fileName}.xlsx` : "data.xlsx");
       }}
     >
-      <SiMicrosoftexcel />
-      Download
+      <div className="flex items-center text-white rounded-lg gap-2 bg-customPrBg p-2">
+        <SiMicrosoftexcel />
+        Download
+      </div>
     </button>
   );
 };
 
-export default DownloadBtn;
+export default ExcelDownloadBtn;

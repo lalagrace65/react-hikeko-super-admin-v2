@@ -2,27 +2,26 @@ import Sidebar from '../components/Sidebar';
 import { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-  } from "@/components/ui/alert-dialog"
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+
 import { Button } from "@/components/ui/button"
 import TrailForm from '@/components/forms/TrailForm';
 import { FaPlus } from "react-icons/fa6";
 import DataTable from '@/components/forms/DataTable';
 import { createColumnHelper } from '@tanstack/react-table';
-import DownloadBtn from '@/components/icons/DownloadBtn';
+import ExcelDownloadBtn from '@/components/icons/DownloadBtn';
+import PdfFile from '@/components/table/pdfFile';
+import PDFDownloadButton from '@/components/icons/PDFDownload';
 
 export default function TrailsPage() {
     const [trails,setTrails] = useState([]);
     const columnHelper = createColumnHelper();
     
+
     // Fetch data from the API
    useEffect(() => {
     const fetchData = async () => {
@@ -33,9 +32,9 @@ export default function TrailsPage() {
             console.error('Error fetching users:', error);
         }
     };
-
     fetchData();
 }, []);
+
 // Define columns for the table
 const columns = useMemo(() => [
   columnHelper.accessor("", {
@@ -60,7 +59,8 @@ const columns = useMemo(() => [
   },
   {
       header: 'Description',
-      accessorKey: 'description', 
+      accessorKey: 'description',
+      Cell: ({ row }) => <div className="text-wrap whitespace-normal text-justify ">{row.details}</div>,
       footer: 'Description',
   },
   {
@@ -94,28 +94,28 @@ const columns = useMemo(() => [
     <div className='flex'>
       <Sidebar/>
       <div className="flex-1 p-4">
-        <AlertDialog>
-        <AlertDialogTrigger asChild>
+        <Dialog>
+        <DialogTrigger asChild>
             <Button variant="outline" className="bg-red-400">
               <FaPlus/>Add new Trail
             </Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent className="max-w-4xl h-[80vh] overflow-y-auto">
-            <AlertDialogTitle className="sr-only">Add New Trail</AlertDialogTitle>
-            <AlertDialogDescription>
-                Fill out the form below to add a new trail to the system. Please provide all necessary details.
-            </AlertDialogDescription>
+        </DialogTrigger>
+        <DialogContent className="max-w-4xl h-[80vh] overflow-y-auto">
+            <DialogTitle className="sr-only">Add New Trail</DialogTitle>
                 <div className="p-4 bg-white rounded-lg">
-                    <TrailForm />
+                  <TrailForm />
                 </div>
-            <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction>Continue</AlertDialogAction>
-            </AlertDialogFooter>
-        </AlertDialogContent>
-        </AlertDialog>
+        </DialogContent>
+        </Dialog>
 
-        <DownloadBtn data={trails} fileName={"Trails"} />
+        <div className="flex justify-end gap-2">
+          <ExcelDownloadBtn data={trails} fileName={"Trails"} />
+          <PDFDownloadButton 
+            document={<PdfFile columns={columns} data={trails}/>} 
+            filename={"Trails"} 
+          />
+        </div>
+        
         <DataTable columns={columns} data={trails} />  
 
       </div>

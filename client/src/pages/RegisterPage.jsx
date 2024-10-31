@@ -2,26 +2,24 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import  emailjs  from '@emailjs/browser';
+
 
 export default function RegisterPage() {
     const [username, setUserName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const form = React.useRef();
 
     // Function for sending registration data to API
     async function registerUser(ev) {
         ev.preventDefault();
-        try{
-            await axios.post('/register', {
-                username,
-                email,
-                password,
-            });
-            toast.success('Registration successful. Now you can log in.');
-        } catch (e) {
-            toast.error('Registration failed. Please try again later.');
-        }
-        
+        emailjs.sendForm('service_ehzzg2c', 'template_xc2nmxt', form.current, 'XczVijVc-NaoUCGic')
+        .then((result) => {
+            console.log(result.text);
+        }, (error) => {
+            console.log(error.text);
+        });
     }
 
     return (
@@ -40,7 +38,7 @@ export default function RegisterPage() {
             {/* Right Side - Register Form */}
             <div className="w-full md:w-1/2 flex flex-col p-8 md:p-12">
             <h2 className="text-2xl font-bold text-gray-700 mb-6">Register</h2>
-            <form onSubmit={registerUser}>
+            <form  ref={form} onSubmit={registerUser}>
                 <div className="mb-4">
                 <label htmlFor="name" className="block text-sm font-medium text-gray-600">Username</label>
                 <input
@@ -48,6 +46,7 @@ export default function RegisterPage() {
                     id="text"
                     className="mt-1 p-2 w-full border rounded-md focus:ring-2 focus:ring-blue-400"
                     placeholder="Enter your username"
+                    name='to_name'
                         value={username}
                         onChange={(e) => setUserName(e.target.value)}
                 />
@@ -59,6 +58,7 @@ export default function RegisterPage() {
                     id="email"
                     className="mt-1 p-2 w-full border rounded-md focus:ring-2 focus:ring-blue-400"
                     placeholder="Enter your email"
+                    name='to_email'
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                 />

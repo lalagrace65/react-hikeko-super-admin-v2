@@ -1,28 +1,28 @@
 const mongoose = require('mongoose');
 const express = require('express');
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
 const Trails = require('../models/Trails');
+const jwtSecret ="qwertyuiop"
 
 //POST
 router.post('/trails', async (req, res) => {
     const { token } = req.cookies;
     const {
-        title,category, 
-        description, features, trailLocation, 
-        trailClass, difficultyLevel, elevation, 
-        trailImages, coordinates
+        title,description, features, trailLocation, 
+        trailClass, difficultyLevel, elevation, trailImages, 
     } = req.body;
 
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
         if (err) throw err;
         const trailDoc = await Trails.create({
             trail: userData.id,
-            title, category, description, 
+            title, description, 
             features, trailLocation,
             trailClass, difficultyLevel, 
-            elevation, trailImages, coordinates
+            elevation, trailImages,
 
         });
         res.json(trailDoc);
@@ -47,6 +47,31 @@ router.get('/trails', async (req, res) => {
     }
 });
 
+// PUT
+router.put('/trails', async (req, res) => {
+    const { token } = req.cookies;
+    const {
+        id,title,category, 
+        description, features, trailLocation, 
+        trailClass, difficultyLevel, elevation, 
+        trailImages, coordinates
+    } = req.body;
+
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+        if (err) throw err;
+        const trailDoc = await Trails.findById(id);
+        if (userData.id === trailDoc.trail.toString()) {
+            trailDoc.set({
+                title, category, description, 
+                features, trailLocation,
+                trailClass, difficultyLevel, 
+                elevation, trailImages, coordinates,
+            });
+            await trailDoc.save();
+            res.json('Updated successfully');
+        }
+    });    
+});
 
 
 module.exports = router;

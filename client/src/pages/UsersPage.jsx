@@ -3,10 +3,13 @@ import Sidebar from '../components/Sidebar';
 import axios from 'axios';  
 import DataTable from '@/components/forms/DataTable';
 import DownloadBtn from '@/components/icons/DownloadBtn';
+import { createColumnHelper } from '@tanstack/react-table';
 
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
+  const columnHelper = createColumnHelper();
+
 
    // Fetch data from the API
    useEffect(() => {
@@ -24,11 +27,11 @@ export default function UsersPage() {
 
 // Define columns for the table
 const columns = useMemo(() => [
-    {
-        header: 'ID',
-        accessorKey: '_id', // Assuming your user data includes an `_id` field from MongoDB
-        footer: 'ID',
-    },
+    columnHelper.accessor("", {
+        id: "No",
+        cell: (info) => <span>{info.row.index + 1}</span>,
+        header: "No.",
+    }),
     {
         header: 'Name',
         accessorFn: row => `${row.username}`, // Adjust according to your user schema

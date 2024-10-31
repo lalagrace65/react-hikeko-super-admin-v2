@@ -1,7 +1,4 @@
 import React, { useContext } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
 import Sidebar from '../components/Sidebar';
 import { UserContext } from '../UserContext.jsx';
 import {
@@ -22,18 +19,8 @@ import PropTypes from 'prop-types';
 
 export default function DashboardPage() {
     const { user } = useContext(UserContext);
-    const navigate = useNavigate();
 
-    const handleLogout = async () => {
-        try {
-            await axios.get('http://localhost:4000/logout', { withCredentials: true });
-            toast.success('Logged out successfully');
-            navigate('/');
-        } catch (error) {
-            console.error('Logout error:', error);
-            toast.error('Failed to log out. Please try again.');
-        }
-    };
+    
 
     const chartData = [
         { month: "January", desktop: 186, mobile: 80 },
@@ -72,7 +59,6 @@ export default function DashboardPage() {
                 )}
                 
                 <h1>Dashboard</h1>
-                <button onClick={handleLogout}>Logout</button>
 
                 <div className="flex flex-wrap gap-4 mt-4">
                     {/* Card 1 */}

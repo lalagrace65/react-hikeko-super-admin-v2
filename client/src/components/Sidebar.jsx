@@ -4,6 +4,9 @@ import { FaMountain } from "react-icons/fa6";
 import { AiOutlineTransaction } from "react-icons/ai";
 import { RiCoupon2Line } from "react-icons/ri";
 import { BiCategoryAlt } from "react-icons/bi";
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import axios from 'axios';
 
 export default function Nav({ show }) {
     const inactiveLink = 'flex gap-1 p-1';
@@ -12,10 +15,23 @@ export default function Nav({ show }) {
     const location = useLocation();
     const pathname = location.pathname;
 
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        try {
+            await axios.get('http://localhost:4000/logout', { withCredentials: true });
+            toast.success('Logged out successfully');
+            navigate('/');
+        } catch (error) {
+            console.error('Logout error:', error);
+            toast.error('Failed to log out. Please try again.');
+        }
+    };
+
     return (
         <aside className={`${show ? 'left-0' : '-left-full'} top-0 p-3 fixed w-full bg-customScBg h-screen md:static md:w-auto transition-all`}>
             <div className="mb-8 mr-4">
-                {/* Any additional content can go here */}
+                <p>Logo</p>
             </div>
             <nav className="flex flex-col gap-2">
                 <span>GENERAL</span>
@@ -43,7 +59,13 @@ export default function Nav({ show }) {
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
                     </svg>
-                    Travel Agency Accounts
+                    Travel Agency Credentials
+                </Link>
+                <Link to="/travelAgencyAccount" className={pathname.includes('/travelAgencyAccount') ? activeLink : inactiveLink}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
+                    </svg>
+                    Travel Agency Account
                 </Link>
                 <Link to="/bookingSched" className={pathname.includes('/bookingSched') ? activeLink : inactiveLink}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -65,6 +87,16 @@ export default function Nav({ show }) {
                     <AiOutlineTransaction className={iconSize} />
                     Transaction
                 </Link>
+                <span>FORUM</span>
+                <Link to={'/reports'} className={pathname.includes('/transaction') ? activeLink : inactiveLink}>
+                    <AiOutlineTransaction className={iconSize} />
+                    Reports
+                </Link>
+                <Link to={'/posts'} className={pathname.includes('/transaction') ? activeLink : inactiveLink}>
+                    <AiOutlineTransaction className={iconSize} />
+                    Posts
+                </Link>
+                <span>SYSTEM CONFIGURATIONS</span>
                 <Link to={'/users'} className={pathname.includes('/users') ? activeLink : inactiveLink}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
@@ -78,6 +110,14 @@ export default function Nav({ show }) {
                     </svg>
                     Settings
                 </Link>
+
+                {/* Logout button */}
+                <button onClick={handleLogout} className={`${inactiveLink} text-red-500 mt-6`}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25a2.25 2.25 0 0 0-2.25-2.25H4.5A2.25 2.25 0 0 0 2.25 5.25v13.5A2.25 2.25 0 0 0 4.5 21h9a2.25 2.25 0 0 0 2.25-2.25V15M9 12h12m0 0l-3-3m3 3l-3 3" />
+                    </svg>
+                    Logout
+                </button>
             </nav>
         </aside>
     );

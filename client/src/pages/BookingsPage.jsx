@@ -29,6 +29,7 @@ export default function BookingsPage() {
       cell: (info) => <span>{info.row.index + 1}</span>,
       header: "No.",
     }),
+    
     {
         header: 'Joiner Name',
         accessorFn: row => `${row.joinerName}`, // Adjust according to your user schema
@@ -83,6 +84,10 @@ export default function BookingsPage() {
       ),
       header: "Proof of Payment",
     }),
+    {
+      header: 'Status',
+      accessorKey: 'status',
+    },
     {
       header: 'Trail Name',
       accessorKey: 'trailName',

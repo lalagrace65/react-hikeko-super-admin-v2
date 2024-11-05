@@ -21,7 +21,7 @@ import SettingsPage from './pages/SettingsPage'
 import ReportsPage from './pages/ReportsPage'
 import PostsPage from './pages/PostsPage'
 // Set default axios settings
-axios.defaults.baseURL = 'http://localhost:4000';
+axios.defaults.baseURL = 'https://hikeko-admin.onrender.com';
 axios.defaults.withCredentials = true;
 
 // A Higher-Order Component for protecting routes

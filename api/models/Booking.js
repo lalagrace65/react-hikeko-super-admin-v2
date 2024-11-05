@@ -15,7 +15,12 @@ const BookingSchema = new mongoose.Schema({
     proofOfPayment: {type: String},
     termsAccepted: {type: Boolean, required: true},
     trailId: { type: mongoose.Schema.Types.ObjectId, ref: 'Trail' },
-    packageId: { type: mongoose.Schema.Types.ObjectId, ref: 'Package', required: true }, // Link to Package model
+    packageId: { type: mongoose.Schema.Types.ObjectId, ref: 'Package', required: true }, 
+    status: { 
+        type: String, 
+        enum: ['Pending', 'Confirmed', 'Completed', 'Cancelled', 'Refunded'], 
+        default: 'Pending' 
+    },
 }, 
 {timestamps: true}
 );

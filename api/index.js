@@ -31,8 +31,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
     credentials: true,
-    origin: 'http://localhost:5173',
+    origin: ['https://hikeko-superadmin.onrender.com/'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 
 }));
 
@@ -66,13 +67,10 @@ app.use(travelAgencySignUp);
 app.use(travelAgencyAccounts);
 app.use(bookingsRoute);
 
-
-// Logout route
-app.get('/logout', (req, res) => {
-    res.cookie('token', '', { expires: new Date(0) }); // Clear the token cookie
-    res.json('Logged out successfully'); // Send response
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
 });
 
 startServer();
-
-// app.listen(4000);

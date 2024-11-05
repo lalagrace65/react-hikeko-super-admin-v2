@@ -2,6 +2,7 @@
 
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
+import { baseURL } from "./Url";
 
 export const UserContext = createContext();
 
@@ -11,7 +12,7 @@ export function UserContextProvider({ children }) {
 
     useEffect( () => {
      if(!user){
-        axios.get('/dashboard').then(({data}) => {
+        axios.get(`${baseURL}/dashboard`).then(({data}) => {
             setUser(data);
         });     
     }

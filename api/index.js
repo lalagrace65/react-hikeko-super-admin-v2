@@ -31,7 +31,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
     credentials: true,
-    origin: ['https://hikeko-superadmin.onrender.com/'],
+    origin: ['https://hikeko-superadmin.onrender.com'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 

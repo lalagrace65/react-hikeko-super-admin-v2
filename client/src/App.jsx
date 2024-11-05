@@ -18,7 +18,8 @@ import TravelAgencyAccounts from './pages/TravelAgencyAccounts'
 import BookingSchedulesPage from './pages/BookingSchedulesPage'
 import TransactionPage from './pages/TransactionPage'
 import SettingsPage from './pages/SettingsPage'
-
+import ReportsPage from './pages/ReportsPage'
+import PostsPage from './pages/PostsPage'
 // Set default axios settings
 axios.defaults.baseURL = 'http://localhost:4000';
 axios.defaults.withCredentials = true;
@@ -97,6 +98,16 @@ function App() {
             <Route path="/settings" element={
                 <ProtectedRoute>
                   <SettingsPage/>
+                </ProtectedRoute>
+            }/>
+            <Route path="/reports" element={
+                <ProtectedRoute>
+                  <ReportsPage/>
+                </ProtectedRoute>
+            }/>
+            <Route path="/posts" element={
+                <ProtectedRoute>
+                  <PostsPage/>
                 </ProtectedRoute>
             }/>
       </Routes>

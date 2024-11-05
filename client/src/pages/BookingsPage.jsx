@@ -1,3 +1,4 @@
+import { baseURL } from '@/Url';
 import Sidebar from '../components/Sidebar';
 import DataTable from '@/components/forms/DataTable';
 import { createColumnHelper } from '@tanstack/react-table';
@@ -12,7 +13,7 @@ export default function BookingsPage() {
   useEffect(() => {
     const fetchData = async () => {
         try {
-            const response = await axios.get('/bookings');
+            const response = await axios.get(`${baseURL}/bookings`);
             setBookings(response.data);
         } catch (error) {
             console.error('Error fetching users:', error);

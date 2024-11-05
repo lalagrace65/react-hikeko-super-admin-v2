@@ -2,6 +2,7 @@ import { useContext, useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext.jsx";
 import axios from 'axios';
+import { baseURL } from "./Url.jsx";
 
 export default function Header() {
     const { user, setUser } = useContext(UserContext);
@@ -13,7 +14,7 @@ export default function Header() {
 
     // Function to handle logout
     async function handleLogout() {
-        await axios.post('http://localhost:4000/logout', {}, { withCredentials: true });
+        await axios.post(`${baseURL}/logout`, {}, { withCredentials: true });
         setUser(null);
         navigate('/'); //this redirects to the index
     }

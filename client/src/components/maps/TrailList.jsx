@@ -2,8 +2,8 @@ import React, { useRef, useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TrailItem from './TrailItem';
 import axios from 'axios';
+import { baseURL } from '@/Url';
 
-axios.defaults.baseURL = 'http://localhost:4000';
 
 export default function TrailList() {
   const [trailData, setTrailData] = useState([]);
@@ -23,7 +23,7 @@ export default function TrailList() {
    useEffect(() => {
     const fetchData = async () => {
         try {
-            const response = await axios.get('/api/trails');
+            const response = await axios.get(`${baseURL}/api/trails`);
             console.log('Received trail data:', response.data);
             setTrailData(response.data);
         } catch (error) {

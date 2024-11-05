@@ -3,6 +3,7 @@ import Sidebar from '../components/Sidebar';
 import DataTable from '@/components/forms/DataTable';
 import { createColumnHelper } from '@tanstack/react-table';
 import axios from 'axios';
+import { baseURL } from '@/Url';
 
 export default function TravelAgencyCredentials() {
   const [travelAgencySignUp, setTravelAgencySignUp] = useState([]);
@@ -12,7 +13,7 @@ export default function TravelAgencyCredentials() {
   useEffect(() => {
     const fetchData = async () => {
         try {
-            const response = await axios.get('/travelAgencySignUp');
+            const response = await axios.get(`${baseURL}/travelAgencySignUp`);
             setTravelAgencySignUp(response.data);
         } catch (error) {
             console.error('Error fetching users:', error);

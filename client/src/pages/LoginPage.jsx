@@ -4,6 +4,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../UserContext.jsx';
+import { baseURL } from '@/Url.jsx';
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,7 +14,7 @@ export default function LoginPage() {
    async function handleLoginSubmit(ev) {
     ev.preventDefault();
     try{
-        const {data} = await axios.post('/login', {
+        const {data} = await axios.post(`${baseURL}/login`, {
             email,
             password,
         });

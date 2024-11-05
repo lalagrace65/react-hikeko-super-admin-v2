@@ -16,6 +16,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import ExcelDownloadBtn from '@/components/icons/DownloadBtn';
 import PdfFile from '@/components/table/pdfFile';
 import PDFDownloadButton from '@/components/icons/PDFDownload';
+import { baseURL } from '@/Url';
 
 export default function TrailsPage() {
     const [trails,setTrails] = useState([]);
@@ -26,7 +27,7 @@ export default function TrailsPage() {
    useEffect(() => {
     const fetchData = async () => {
         try {
-            const response = await axios.get('/trails');
+            const response = await axios.get(`${baseURL}/trails`);
             setTrails(response.data);
         } catch (error) {
             console.error('Error fetching users:', error);

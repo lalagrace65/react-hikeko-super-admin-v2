@@ -7,6 +7,7 @@ import { BiCategoryAlt } from "react-icons/bi";
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import { baseURL } from "@/Url";
 
 export default function Nav({ show }) {
     const inactiveLink = 'flex gap-1 p-1';
@@ -19,7 +20,7 @@ export default function Nav({ show }) {
 
     const handleLogout = async () => {
         try {
-            await axios.get('http://localhost:4000/logout', { withCredentials: true });
+            await axios.get(`${baseURL}/logout`, { withCredentials: true });
             toast.success('Logged out successfully');
             navigate('/');
         } catch (error) {
@@ -88,11 +89,11 @@ export default function Nav({ show }) {
                     Transaction
                 </Link>
                 <span>FORUM</span>
-                <Link to={'/reports'} className={pathname.includes('/transaction') ? activeLink : inactiveLink}>
+                <Link to={'/reports'} className={pathname.includes('/reports') ? activeLink : inactiveLink}>
                     <AiOutlineTransaction className={iconSize} />
                     Reports
                 </Link>
-                <Link to={'/posts'} className={pathname.includes('/transaction') ? activeLink : inactiveLink}>
+                <Link to={'/posts'} className={pathname.includes('/posts') ? activeLink : inactiveLink}>
                     <AiOutlineTransaction className={iconSize} />
                     Posts
                 </Link>

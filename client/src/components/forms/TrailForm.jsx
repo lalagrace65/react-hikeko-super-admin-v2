@@ -7,6 +7,7 @@ import GoogleMapView from '../maps/GoogleMapView';
 import { UserLocationContext } from '@/context/UserLocationContext';
 import { TextField, Button, IconButton, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { baseURL } from '@/Url';
 
 export default function TrailForm() {
     const [trails, setTrails] = useState('');
@@ -47,7 +48,7 @@ export default function TrailForm() {
         if (!validateForm()) return;
 
         try {
-            await axios.post('/trails', {
+            await axios.post(`${baseURL}/trails`, {
                 title,
                 description,
                 features,
@@ -74,7 +75,7 @@ export default function TrailForm() {
                 data.append('file', file);
             }
             try {
-                const res = await axios.post('/api/upload', data);
+                const res = await axios.post(`${baseURL}/api/upload`, data);
                 setTrailImages(oldImages => {
                     return [...oldImages, ...res.data.links];
                 });

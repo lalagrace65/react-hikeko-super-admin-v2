@@ -3,6 +3,7 @@ import axios from 'axios';
 import DataTable from '@/components/forms/DataTable';
 import Sidebar from '../components/Sidebar'
 import { createColumnHelper } from '@tanstack/react-table';
+import { baseURL } from '@/Url';
 export default function TravelAgencyAccounts() {
   const [travelAgencyAccounts, setTravelAgencyAccounts] = useState([]);
   const columnHelper = createColumnHelper();
@@ -31,7 +32,7 @@ export default function TravelAgencyAccounts() {
   useEffect(() => {
     const fetchData = async () => {
         try {
-            const response = await axios.get('/travelAgencyAccounts');
+            const response = await axios.get(`${baseURL}/travelAgencyAccounts`);
             setTravelAgencyAccounts(response.data);
         } catch (error) {
             console.error('Error fetching users:', error);

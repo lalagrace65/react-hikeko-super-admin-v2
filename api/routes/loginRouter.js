@@ -8,8 +8,6 @@ const router = express.Router();
 const jwtSecret = 'qwertyuiop';
 
 
-
-
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 

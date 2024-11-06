@@ -19,7 +19,7 @@ function GoogleMapView() {
     return (
         <div>
             <LoadScript
-                googleMapsApiKey={import.meta.env.VITE_GOOGLE_API_KEY}
+                googleMapsApiKey={"AIzaSyBm4BzQu1OZU5qB77IpAqr-lt21E21ctvU"}
                 mapId={'16b2c61749498632'}
             >
                 <GoogleMap 
@@ -28,18 +28,16 @@ function GoogleMapView() {
                     options={{ mapId: '16b2c61749498632' }}
                     zoom={15}
                 >
-                    {userLocation && (
-                        <MarkerF
-                            position={userLocation}
-                            icon={{
-                                url: '/marker.png',
-                                scaledSize: {
-                                    width: 50,
-                                    height: 50,
-                                }
-                            }}
-                        />
-                    )}
+                    <MarkerF
+                        position={userLocation}
+                        icon={{
+                            url: '/marker.png',
+                            scaledSize: {
+                                width: 50,
+                                height: 50,
+                            }
+                        }}
+                    />
                 </GoogleMap>
             </LoadScript>
         </div>

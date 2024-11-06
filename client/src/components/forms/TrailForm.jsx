@@ -1,18 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import axios from 'axios';
 import { PulseLoader } from 'react-spinners';
 import { ReactSortable } from 'react-sortablejs';
 import toast from 'react-hot-toast';
 import GoogleMapView from '../maps/GoogleMapView';
 import { UserLocationContext } from '@/context/UserLocationContext';
-import { TextField, Button, IconButton, Typography } from '@mui/material';
+import { TextField, Button,Typography} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { baseURL } from '@/Url';
+import phil, { regions,  getProvincesByRegion} from 'phil-reg-prov-mun-brgy'; 
+import { Label } from '../ui/label';
 
 export default function TrailForm() {
     const [trails, setTrails] = useState('');
     const [title, setTitle] = useState('');
     const [trailLocation, setTrailLocation] = useState('');
+    const [selectedRegion, setSelectedRegion] = useState('');
+    const [provinces, setProvinces] = useState([]);
+    const [selectedProvince, setSelectedProvince] = useState('');
+    
     const [features, setFeatures] = useState('');
     const [description, setDescription] = useState('');
     const [trailClass, setTrailClass] = useState('');
@@ -31,8 +37,11 @@ export default function TrailForm() {
 
         if (checkEmptyOrWhitespace(title)) newErrors.title = 'Trail name is required';
         if (checkEmptyOrWhitespace(trailLocation)) newErrors.trailLocation = 'Location is required';
+        if (checkEmptyOrWhitespace(selectedRegion)) newErrors.selectedRegion = 'Region is required';
+        if (checkEmptyOrWhitespace(selectedProvince)) newErrors.selectedProvince = 'Province is required';
         if (checkEmptyOrWhitespace(features)) newErrors.features = 'Features are required';
-        if (trailImages.length === 0) newErrors.trailImages = 'Photos are required';        if (checkEmptyOrWhitespace(description)) newErrors.description = 'Description is required';
+        if (trailImages.length === 0) newErrors.trailImages = 'Photos are required';       
+        if (checkEmptyOrWhitespace(description)) newErrors.description = 'Description is required';
         if (checkEmptyOrWhitespace(trailClass)) newErrors.trailClass = 'Trail class is required';
         if (checkEmptyOrWhitespace(difficultyLevel)) newErrors.difficultyLevel = 'Difficulty level is required';
         if (checkEmptyOrWhitespace(elevation)) newErrors.elevation = 'Elevation is required';
@@ -42,13 +51,36 @@ export default function TrailForm() {
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
+
+    useEffect(() => {
+        if (selectedRegion) {
+            // Fetch provinces when a region is selected
+            const fetchedProvinces = getProvincesByRegion(selectedRegion);
+            setProvinces(fetchedProvinces);
+            setSelectedProvince(''); // Reset selected province when region changes
+        } else {
+            setProvinces([]);
+            setSelectedProvince('');
+        }
+    }, [selectedRegion]);
     
     const handleSubmit = async (ev) => {
         ev.preventDefault();
-        if (!validateForm()) return;
+        if (!validateForm()) {
+            console.log('Form validation failed', errors);  // Log validation errors
+        return;
+        }
 
+        const lat = parseFloat(latitude); // Ensure latitude is a number
+        const lon = parseFloat(longitude);
+
+        // Get the region name from the regions list based on selectedRegion
+        const selectedRegionName = regions.find(region => region.reg_code === selectedRegion)?.name;
+        
+        // Get the province name from the provinces list based on selectedProvince
+        const selectedProvinceName = provinces.find(province => province.prov_code === selectedProvince)?.name;
         try {
-            await axios.post(`${baseURL}/trails`, {
+             const response = await axios.post('/trails', {
                 title,
                 description,
                 features,
@@ -57,15 +89,35 @@ export default function TrailForm() {
                 difficultyLevel,
                 elevation,
                 trailImages,
-                coordinates: { latitude, longitude }
+                coordinates: { lat: latitude, lng: longitude },
+                region: selectedRegionName,   // Send the region name
+                province: selectedProvinceName // Send the province name
             });
+            console.log('Response from server:', response.data); 
             toast.success('Trail saved successfully');
+
+            // Reset the form fields after successful submission
+            setTitle('');
+            setTrailLocation('');
+            setSelectedRegion('');
+            setSelectedProvince('');
+            setFeatures('');
+            setDescription('');
+            setTrailClass('');
+            setDifficultyLevel('');
+            setElevation('');
+            setLatitude(null);
+            setLongitude(null);
+            setTrailImages([]);
+
+
             navigate('/trails');
         } catch (e) {
             toast.error('Saving Trail failed. Please try again later.');
         }
     };
-     //Sortable image upload
+
+    //Sortable image upload
      async function uploadImages(ev){
         const files = ev.target?.files;
         if(files?.length > 0){
@@ -89,7 +141,6 @@ export default function TrailForm() {
     function updateTrailImagesOrder(trailImages){
         setTrailImages(trailImages);
     }
-
     
     return (
         <form onSubmit={handleSubmit} className="grid gap-4">
@@ -104,9 +155,38 @@ export default function TrailForm() {
                 error={!!errors.title}
                 helperText={errors.title}
             />
+            {/* Dropdown for Regions */}
+            <select
+                id="region"
+                value={selectedRegion}
+                onChange={(ev) => setSelectedRegion(ev.target.value)}
+                className="form-select"
+            >
+                <option value="">Select a Region</option>
+                {regions.map((region) => (
+                    <option key={region.reg_code} value={region.reg_code}>
+                        {region.name}
+                    </option>
+                ))}
+            </select>
+
+            {/* Dropdown for Provinces */}
+            <select
+                id="province"
+                value={selectedProvince}
+                onChange={(ev) => setSelectedProvince(ev.target.value)}
+                className="form-select"
+            >
+                <option value="">Select a Province</option>
+                {provinces.map((province) => (
+                    <option key={province.prov_code} value={province.prov_code}>
+                        {province.name}
+                    </option>
+                ))}
+            </select>
 
             <TextField
-                label="Location"
+                label="Specific Location"
                 variant="outlined"
                 fullWidth
                 value={trailLocation}

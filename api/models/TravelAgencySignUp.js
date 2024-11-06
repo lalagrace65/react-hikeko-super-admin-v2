@@ -18,10 +18,11 @@ const TravelAgencySignUpSchema = new mongoose.Schema({
   mayorsPermitPhoto: { type: String, required: true },
   status: { 
     type: String, 
-    enum: ['pending', 'verified', 'rejected'], 
-    default: 'pending' 
+    enum: ['Pending Verification', 'Approved', 'Rejected'], 
+    default: 'Pending Verification' 
   },
   emailVerified: { type: Boolean, default: false },
+  verificationToken: { type: String },
 
 }, { timestamps: true });
 

@@ -24,6 +24,8 @@ const usersRoute = require('./routes/usersRouter');
 const travelAgencySignUp = require('./routes/travelAgencySignUp');
 const travelAgencyAccounts = require('./routes/travelAgencyAccounts');
 const bookingsRoute = require('./routes/bookingsRoute');
+const logoutRoute = require('./routes/logoutRoute');
+const toursAndPackages = require('./routes/toursAndPackages');
 
 
 //use to parse - to get the username
@@ -59,6 +61,7 @@ app.get("/", (req, res) => {
 //Use the routes
 app.use(registerRoute);
 app.use(loginRoute);
+app.use(logoutRoute);
 app.use(dashboardRoute);
 app.use(uploadRoute);
 app.use(trailsRoute);
@@ -66,6 +69,7 @@ app.use(usersRoute);
 app.use(travelAgencySignUp);
 app.use(travelAgencyAccounts);
 app.use(bookingsRoute);
+app.use(toursAndPackages);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

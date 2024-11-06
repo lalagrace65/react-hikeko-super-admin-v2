@@ -14,6 +14,7 @@ export default function BookingsPage() {
     const fetchData = async () => {
         try {
             const response = await axios.get(`${baseURL}/bookings`);
+            console.log('Fetched bookings:', response.data);
             setBookings(response.data);
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -29,7 +30,14 @@ export default function BookingsPage() {
       cell: (info) => <span>{info.row.index + 1}</span>,
       header: "No.",
     }),
-    
+    {
+      header: 'Trail Name',
+      accessorFn: (row) => row.packageId?.trailId?.title ,
+    },
+    {
+      header: 'Travel Agency',
+      accessorFn: (row) => row.packageId?.travelAgency?.name ,
+    },
     {
         header: 'Joiner Name',
         accessorFn: row => `${row.joinerName}`, // Adjust according to your user schema
@@ -44,7 +52,7 @@ export default function BookingsPage() {
     },
     {
       header: 'PickUp Location',
-      accessorKey: 'pickUpLocation',
+      accessorKey: 'pickupLocation',
     },
     {
       header: 'Age',
@@ -88,10 +96,7 @@ export default function BookingsPage() {
       header: 'Status',
       accessorKey: 'status',
     },
-    {
-      header: 'Trail Name',
-      accessorKey: 'trailName',
-    },
+    
     ], []);
 
   return (

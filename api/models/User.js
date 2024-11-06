@@ -4,7 +4,10 @@ const UserSchema = new mongoose.Schema({
     username: String,
     email: { type: String, unique: true },
     password: String,
-    role: { type: String, default: 'super admin' },
+    role: { 
+        type: String, 
+        enum: ['user', 'admin', 'staff', 'super admin'],
+        default: 'super admin' },
     verified: { type: Boolean, required: true, default: false, },
 },{ 
     timestamps: true }

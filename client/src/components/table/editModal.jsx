@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import TrailEdit from "../Edit/TrailsEdit";
+import TrailsEdit from "../Edit/TrailsEdit";
 
 const EditModal = ({ rowData, pageContext, onClose }) => {
   const [formData, setFormData] = useState({ ...rowData });
@@ -46,44 +48,16 @@ const EditModal = ({ rowData, pageContext, onClose }) => {
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
+          {pageContext === "trails" && (
+            <TrailsEdit
+            initialData={formData} // Pass the initial data
+            onChange={handleChange} // Pass the change handler
+          />
+
+          )}
           {pageContext === "bookings" && (
             <>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="joinerName" className="text-right">
-                  Joiner Name
-                </Label>
-                <Input
-                  id="joinerName"
-                  name="joinerName"
-                  value={formData.joinerName}
-                  onChange={handleChange}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="contactNumber" className="text-right">
-                  Contact Number
-                </Label>
-                <Input
-                  id="contactNumber"
-                  name="contactNumber"
-                  value={formData.contactNumber}
-                  onChange={handleChange}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="status" className="text-right">
-                  Status
-                </Label>
-                <Input
-                  id="status"
-                  name="status"
-                  value={formData.status}
-                  onChange={handleChange}
-                  className="col-span-3"
-                />
-              </div>
+              
             </>
           )}
           {pageContext === "travelAgency" && (

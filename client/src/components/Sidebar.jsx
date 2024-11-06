@@ -20,7 +20,7 @@ export default function Nav({ show }) {
 
     const handleLogout = async () => {
         try {
-            await axios.get(`${baseURL}/logout`, { withCredentials: true });
+            await axios.post(`${baseURL}/logout`, { withCredentials: true });
             toast.success('Logged out successfully');
             navigate('/');
         } catch (error) {

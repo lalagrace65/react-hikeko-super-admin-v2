@@ -9,7 +9,7 @@ import { TextField, Button, IconButton, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { baseURL } from '@/Url';
 
-export default function TrailForm() {
+export default function TrailsEdit({ initialData, onChange }) {
     const [trails, setTrails] = useState('');
     const [title, setTitle] = useState('');
     const [trailLocation, setTrailLocation] = useState('');
@@ -43,6 +43,28 @@ export default function TrailForm() {
         return Object.keys(newErrors).length === 0;
     };
     
+    // Update the states when initialData changes
+    useEffect(() => {
+        setTitle(initialData.title || '');
+        setTrailLocation(initialData.trailLocation || '');
+        setFeatures(initialData.features || '');
+        // Update other states...
+    }, [initialData]);
+
+    // Update handler for title
+    const handleTitleChange = (e) => {
+        const value = e.target.value;
+        setTitle(value);
+        onChange('title', value); // Call the parent handler
+    };
+
+    // Update handler for trailLocation
+    const handleTrailLocationChange = (e) => {
+        const value = e.target.value;
+        setTrailLocation(value);
+        onChange('trailLocation', value); // Call the parent handler
+    };
+
     const handleSubmit = async (ev) => {
         ev.preventDefault();
         if (!validateForm()) return;
@@ -100,7 +122,7 @@ export default function TrailForm() {
                 variant="outlined"
                 fullWidth
                 value={title}
-                onChange={(ev) => setTitle(ev.target.value)}
+                onChange={handleTitleChange}
                 error={!!errors.title}
                 helperText={errors.title}
             />
@@ -110,9 +132,9 @@ export default function TrailForm() {
                 variant="outlined"
                 fullWidth
                 value={trailLocation}
-                onChange={(ev) => setTrailLocation(ev.target.value)}
                 error={!!errors.trailLocation}
                 helperText={errors.trailLocation}
+                onChange={handleTrailLocationChange}
             />
 
             <TextField

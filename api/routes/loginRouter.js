@@ -2,20 +2,15 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const cors = require('cors');
 const User = require('../models/User');
 const router = express.Router();
 
 const jwtSecret = 'qwertyuiop';
 
-// Define CORS options for the /login route
-const corsOptions = {
-    origin: 'https://hikeko-superadmin.onrender.com', // Allow this specific origin
-    credentials: true, // Allow cookies and credentials to be sent
-};
 
 
-router.post('/login',cors(corsOptions), async (req, res) => {
+
+router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {

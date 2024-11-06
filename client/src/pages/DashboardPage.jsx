@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import { UserContext } from '../UserContext.jsx';
 import {
@@ -15,12 +15,47 @@ import { LuTrendingUp } from "react-icons/lu";
 import { ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { ChartLegend, ChartLegendContent } from "@/components/ui/chart"
 import PropTypes from 'prop-types';
+import axios from 'axios';
+import { baseURL } from '@/Url';
 
 
 export default function DashboardPage() {
     const { user } = useContext(UserContext);
+    const [totalUsers, setTotalUsers] = useState();
+    const [totalNewSignups, setTotalNewSignups] = useState();
+    const [totalTrails, setTotalTrails] = useState();
+    const [totalBookings, setTotalBookings] = useState();
+    const [totalTravelAgencyAccounts, setTotalTravelAgencyAccounts] = useState();
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    
+    useEffect(() => {
+        async function fetchUserCount() {
+            try {
+                setLoading(true);
+                const [userCountRes, newSignupsRes, trailsRes, bookingsRes, travelAgencyAccountsRes] = await Promise.all([
+                    axios.get(`${baseURL}/userCounts`),
+                    axios.get(`${baseURL}/newSignups`),
+                    axios.get(`${baseURL}/totalTrails`),
+                    axios.get(`${baseURL}/totalBookings`),
+                    axios.get(`${baseURL}/totalTravelAgencyAccounts`),
+
+                ]);
+                setTotalUsers(userCountRes.data.totalUsers);
+                setTotalNewSignups(newSignupsRes.data.totalNewSignups);
+                setTotalTrails(trailsRes.data.totalTrails);
+                setTotalBookings(bookingsRes.data.totalBookings);
+                setTotalTravelAgencyAccounts(travelAgencyAccountsRes.data.totalTravelAgencyAccounts);
+            } catch (error) {
+                console.error('Error fetching user count:', error);
+                setError('Failed to fetch data');
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchUserCount();
+    }, []);
+
 
     const chartData = [
         { month: "January", desktop: 186, mobile: 80 },
@@ -68,8 +103,8 @@ export default function DashboardPage() {
                             <CardDescription>Overview of user engagement</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <p>Active Users: 120</p>
-                            <p>New Signups: 30</p>
+                            <p>Total Users: {totalUsers}</p>
+                            <p>New Signups: {totalNewSignups}</p>
                         </CardContent>
 
                     </Card>
@@ -77,12 +112,12 @@ export default function DashboardPage() {
                     {/* Card 2 */}
                     <Card className="w-[220px] h-[200px]">
                         <CardHeader>
-                            <CardTitle>Recent Activity</CardTitle>
-                            <CardDescription>Latest user actions</CardDescription>
+                            <CardTitle>Trails Activity</CardTitle>
+                            <CardDescription>Latest  added trails</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <p>John Doe signed up</p>
-                            <p>Jane Doe made a purchase</p>
+                            <p>Total Trails: {totalTrails}</p>
+                            
                         </CardContent>
 
                     </Card>
@@ -90,12 +125,11 @@ export default function DashboardPage() {
                     {/* Card 3 */}
                     <Card className="w-[220px] h-[200px]">
                         <CardHeader>
-                            <CardTitle>Sales Report</CardTitle>
-                            <CardDescription>Current month sales figures</CardDescription>
+                            <CardTitle>Bookings Report</CardTitle>
+                            <CardDescription>...</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <p>Total Sales: $5,000</p>
-                            <p>Orders: 150</p>
+                            <p>Total Bookings: {totalBookings} </p>
                         </CardContent>
 
                     </Card>
@@ -103,11 +137,11 @@ export default function DashboardPage() {
                     {/* Card 4 */}
                     <Card className="w-[220px] h-[200px]">
                         <CardHeader>
-                            <CardTitle>System Notifications</CardTitle>
-                            <CardDescription>Latest alerts and notifications</CardDescription>
+                            <CardTitle>Partners</CardTitle>
+                            <CardDescription>...</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <p>Server maintenance scheduled</p>
+                            <p>Total Partners: {totalTravelAgencyAccounts}</p>
                         </CardContent>
                        
                     </Card>
